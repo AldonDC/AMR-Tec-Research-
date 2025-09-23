@@ -389,178 +389,200 @@ end
 
 ## 💻 Implementación en MATLAB
 
-### Arquitectura del Código
+### Pipeline de Captura de Datos RTK-LiDAR
 
-El sistema está diseñado con una arquitectura modular que separa claramente el procesamiento de cada sensor y la lógica de fusión:
+El sistema desarrollado para la captura sincronizada de datos RTK-GPS y Velodyne VLP-16 utiliza un enfoque de streaming en tiempo real:
 
 ```matlab
-% Clase principal del sistema de fusión
-classdef RTKLidarFusion < handle
-    properties (Access = private)
-        ekf_estimator           % Filtro de Kalman Extendido
-        lidar_processor        % Procesador de datos Velodyne
-        gps_processor          % Procesador RTK-GPS
-        calibration_params     % Parámetros de calibración extrínseca
-        sync_buffer           % Buffer para sincronización temporal
+% Configuración del sistema de captura
+rtkPort = 'COM5';           % Puerto del receptor RTK
+rtkBaud = 115200;           % Velocidad de comunicación
+lidar = velodynelidar('VLP16');  % Objeto LiDAR Velodyne
+
+% Bucle principal de captura sincronizada
+for k = 1:1e6
+    % Lectura frame LiDAR con timestamp
+    [pc, t] = read(lidar,1);
+    frames{k} = pc;
+    timestamps(k,1) = t;
+    
+    % Lectura RTK simultánea
+    rtk = struct('lat',nan,'lon',nan,'alt',nan);
+    while s.NumBytesAvailable > 0
+        line = readline(s);
+        if startsWith(line,"$GPGGA") || startsWith(line,"$GNGGA")
+            rtk = parseNMEA_GGA(line, rtk);
+        end
     end
     
-    methods (Access = public)
-        function obj = RTKLidarFusion(config)
-            obj.initialize_components(config);
+    % Almacenamiento sincronizado
+    K(k) = struct('t',t, 'frame',pc, 'lat',rtk.lat, 'lon',rtk.lon, 'alt',rtk.alt);
+end
+```
+
+### Estructura de Datos Capturados (.mat)
+
+Los datos se almacenan en archivos .mat con la siguiente estructura:
+
+```matlab
+% Variables principales en el archivo .mat
+frames      % Cell array: {pointCloud_1, pointCloud_2, ..., pointCloud_n}
+timestamps  % Array datetime: [t1; t2; ...; tn] - timestamps LiDAR
+lat         % Array double: [lat1; lat2; ...; latn] - latitudes RTK  
+lon         % Array double: [lon1; lon2; ...; lonn] - longitudes RTK
+alt         % Array double: [alt1; alt2; ...; altn] - altitudes RTK
+rtkTime     % Array datetime: [rt1; rt2; ...; rtn] - timestamps RTK
+K           % Struct array: K(i) = {t, frame, lat, lon, alt} - datos consolidados
+```
+
+### Procesamiento de Datos RTK-GPS
+
+```matlab
+function rtk = parseNMEA_GGA(line, rtk)
+    % Parser de mensajes NMEA GGA para extraer coordenadas RTK
+    p = split(string(line), ",");
+    if numel(p) < 10, return; end
+    
+    latStr = p{3}; latHem = p{4};   % ddmm.mmmm y hemisferio N/S
+    lonStr = p{5}; lonHem = p{6};   % dddmm.mmmm y hemisferio E/W  
+    altStr = p{10};                 % altitud en metros
+    
+    if strlength(latStr) >= 4 && strlength(lonStr) >= 5
+        latVal = nmeaToDeg(latStr,true);    % conversión a grados decimales
+        lonVal = nmeaToDeg(lonStr,false);
+        
+        % Aplicar signos según hemisferio
+        if strcmpi(latHem,'S'), latVal = -latVal; end
+        if strcmpi(lonHem,'W'), lonVal = -lonVal; end
+        
+        rtk.lat = latVal;
+        rtk.lon = lonVal;
+    end
+    
+    % Procesamiento de altitud
+    a = str2double(altStr);
+    if ~isnan(a), rtk.alt = a; end
+end
+```
+
+### Algoritmo de Fusión Post-Procesamiento
+
+Una vez capturados los datos sincronizados, el algoritmo de fusión procesa el archivo .mat:
+
+```matlab
+function pose_trajectory = process_captured_data(mat_filename)
+    % Cargar datos capturados
+    load(mat_filename, 'frames', 'timestamps', 'lat', 'lon', 'alt', 'K');
+    
+    % Inicializar estimador de pose
+    pose_estimator = EKFPoseEstimator();
+    pose_trajectory = [];
+    
+    for i = 2:length(frames)
+        % Odometría LiDAR entre frames consecutivos
+        relative_transform = compute_lidar_odometry(frames{i}, frames{i-1});
+        
+        % Coordenadas RTK válidas para este frame
+        if ~isnan(lat(i)) && ~isnan(lon(i)) && ~isnan(alt(i))
+            % Convertir coordenadas geodésicas a UTM local
+            [x_utm, y_utm] = deg2utm(lat(i), lon(i));
+            gps_position = [x_utm; y_utm; alt(i)];
+            gps_available = true;
+        else
+            gps_position = [];
+            gps_available = false;
         end
         
-        function pose = process_sensors(obj, lidar_scan, gps_data, timestamp)
-            % Pipeline principal de procesamiento
-            pose = obj.run_fusion_step(lidar_scan, gps_data, timestamp);
+        % Aplicar fusión EKF
+        pose_estimator.predict(timestamps(i));
+        pose_estimator.update_lidar(relative_transform);
+        
+        if gps_available
+            pose_estimator.update_gps(gps_position);
+        end
+        
+        % Guardar pose estimada
+        current_pose = pose_estimator.get_current_pose();
+        pose_trajectory = [pose_trajectory; current_pose'];
+    end
+end
+```
+
+### Sincronización Temporal y Validación
+
+```matlab
+function [valid_indices, sync_quality] = validate_synchronization(timestamps, rtkTime, K)
+    % Análisis de calidad de sincronización temporal
+    valid_indices = [];
+    sync_quality = [];
+    
+    for i = 1:length(K)
+        % Verificar disponibilidad de datos RTK
+        has_rtk = ~isnan(K(i).lat) && ~isnan(K(i).lon) && ~isnan(K(i).alt);
+        
+        % Verificar calidad del frame LiDAR
+        num_points = size(K(i).frame.Location, 1);
+        has_sufficient_points = num_points > 1000;  % mínimo 1000 puntos
+        
+        % Calcular diferencia temporal entre LiDAR y RTK
+        if has_rtk && i <= length(rtkTime)
+            time_diff = abs(seconds(timestamps(i) - rtkTime(i)));
+            temporal_sync = time_diff < 0.1;  % sincronización < 100ms
+        else
+            temporal_sync = false;
+        end
+        
+        % Frame válido si cumple criterios mínimos
+        if has_sufficient_points
+            valid_indices(end+1) = i;
+            
+            % Calidad basada en disponibilidad RTK y sincronización
+            if has_rtk && temporal_sync
+                sync_quality(end+1) = 1.0;  % calidad máxima
+            elseif has_rtk
+                sync_quality(end+1) = 0.7;  % RTK disponible pero desincronizado
+            else
+                sync_quality(end+1) = 0.3;  % solo LiDAR disponible
+            end
         end
     end
 end
 ```
 
-### Procesamiento de Datos Velodyne VLP-16
+### Herramientas de Análisis y Visualización
 
 ```matlab
-function relative_transform = compute_lidar_odometry(scan_current, scan_previous)
-    % Preprocesamiento: filtrado y voxelización
-    scan_current = preprocess_pointcloud(scan_current);
-    scan_previous = preprocess_pointcloud(scan_previous);
+function analyze_dataset(mat_filename)
+    load(mat_filename, 'K', 'timestamps');
     
-    % Registro ICP con múltiples resoluciones
-    initial_guess = eye(4);
-    [transform_coarse, ~] = pcregistericp(scan_current, scan_previous, ...
-        'InitialTransform', initial_guess, 'MaxIterations', 50);
+    % Estadísticas del dataset
+    total_frames = length(K);
+    frames_with_rtk = sum(~isnan([K.lat]));
+    rtk_coverage = frames_with_rtk / total_frames * 100;
     
-    % Refinamiento con NDT
-    relative_transform = ndt_registration(scan_current, scan_previous, ...
-        transform_coarse);
+    fprintf('📊 Análisis del Dataset:\n');
+    fprintf('   Total de frames: %d\n', total_frames);
+    fprintf('   Frames con RTK: %d (%.1f%%)\n', frames_with_rtk, rtk_coverage);
     
-    % Validación de la transformación
-    if ~validate_transform(relative_transform)
-        relative_transform = eye(4); % Fallback a identidad
+    % Análisis de calidad de puntos LiDAR
+    point_counts = arrayfun(@(x) size(x.frame.Location,1), K);
+    fprintf('   Puntos LiDAR promedio: %.0f ± %.0f\n', mean(point_counts), std(point_counts));
+    
+    % Análisis temporal
+    duration = timestamps(end) - timestamps(1);
+    avg_frequency = total_frames / seconds(duration);
+    fprintf('   Duración: %.1f segundos\n', seconds(duration));
+    fprintf('   Frecuencia promedio: %.1f Hz\n', avg_frequency);
+    
+    % Visualización de trayectoria RTK (cuando disponible)
+    valid_rtk = ~isnan([K.lat]) & ~isnan([K.lon]);
+    if sum(valid_rtk) > 10
+        figure;
+        plot([K(valid_rtk).lon], [K(valid_rtk).lat], 'b.-', 'LineWidth', 2);
+        xlabel('Longitud [°]'); ylabel('Latitud [°]');
+        title('Trayectoria RTK-GPS');
+        grid on; axis equal;
     end
-end
-
-function scan_filtered = preprocess_pointcloud(scan_raw)
-    % Remover puntos fuera del rango útil
-    distance_mask = (scan_raw.Location(:,1).^2 + scan_raw.Location(:,2).^2) > 1.0;
-    scan_filtered = select(scan_raw, distance_mask);
-    
-    % Voxelización para reducir densidad
-    scan_filtered = pcdownsample(scan_filtered, 'gridAverage', 0.2);
-    
-    % Filtro estadístico para outliers
-    scan_filtered = pcdenoise(scan_filtered);
-end
-```
-
-### Integración RTK-GPS
-
-```matlab
-function [position, quality] = process_rtk_gps(nmea_sentence)
-    % Parser de mensajes NMEA GGA
-    if contains(nmea_sentence, '$GPGGA') || contains(nmea_sentence, '$GNGGA')
-        fields = split(nmea_sentence, ',');
-        
-        % Extraer coordenadas
-        lat_deg = parse_coordinate(fields{3}, fields{4});
-        lon_deg = parse_coordinate(fields{5}, fields{6});
-        altitude = str2double(fields{10});
-        
-        % Convertir a coordenadas UTM locales
-        [x_utm, y_utm, zone] = deg2utm(lat_deg, lon_deg);
-        position = [x_utm; y_utm; altitude];
-        
-        % Evaluar calidad de la señal
-        fix_quality = str2double(fields{7});
-        hdop = str2double(fields{9});
-        quality = assess_gps_quality(fix_quality, hdop);
-    else
-        position = [];
-        quality = 0;
-    end
-end
-
-function quality_score = assess_gps_quality(fix_type, hdop)
-    % RTK Fixed: máxima calidad
-    if fix_type == 4
-        quality_score = 1.0;
-    % RTK Float: alta calidad
-    elseif fix_type == 5
-        quality_score = 0.8;
-    % DGPS: calidad media
-    elseif fix_type == 2 && hdop < 2.0
-        quality_score = 0.6;
-    % GPS estándar: baja calidad
-    elseif fix_type == 1 && hdop < 5.0
-        quality_score = 0.3;
-    else
-        quality_score = 0.0; % Sin señal útil
-    end
-end
-```
-
-### Core del Algoritmo de Fusión
-
-```matlab
-function pose_estimate = run_fusion_step(obj, lidar_scan, gps_data, timestamp)
-    % 1. Sincronización temporal
-    [synced_lidar, synced_gps] = obj.synchronize_measurements(...
-        lidar_scan, gps_data, timestamp);
-    
-    % 2. Predicción EKF basada en modelo cinemático
-    obj.ekf_estimator.predict(timestamp);
-    
-    % 3. Actualización con odometría LiDAR (siempre disponible)
-    if ~isempty(synced_lidar)
-        relative_motion = obj.lidar_processor.compute_odometry(synced_lidar);
-        obj.ekf_estimator.update_lidar(relative_motion);
-    end
-    
-    % 4. Actualización con GPS (cuando calidad es suficiente)
-    if ~isempty(synced_gps) && synced_gps.quality > 0.5
-        obj.ekf_estimator.update_gps(synced_gps.position, synced_gps.quality);
-    end
-    
-    % 5. Obtener estimación final
-    pose_estimate = obj.ekf_estimator.get_current_pose();
-    
-    % 6. Logging y visualización
-    obj.log_fusion_state(pose_estimate, timestamp);
-end
-```
-
-### Calibración Extrínseca Automática
-
-```matlab
-function T_lidar_to_gps = calibrate_extrinsic_transform(lidar_trajectory, gps_trajectory)
-    % Alineación temporal usando correlación cruzada
-    [lag, correlation] = xcorr(lidar_trajectory.timestamps, gps_trajectory.timestamps);
-    [~, max_idx] = max(correlation);
-    time_offset = lag(max_idx);
-    
-    % Sincronizar trayectorias
-    gps_synced = interpolate_trajectory(gps_trajectory, ...
-        lidar_trajectory.timestamps + time_offset);
-    
-    % Estimación de transformación usando SVD
-    lidar_points = lidar_trajectory.positions;
-    gps_points = gps_synced.positions;
-    
-    % Centrar datos
-    lidar_centroid = mean(lidar_points, 2);
-    gps_centroid = mean(gps_points, 2);
-    
-    lidar_centered = lidar_points - lidar_centroid;
-    gps_centered = gps_points - gps_centroid;
-    
-    % Calcular matriz de rotación y traslación
-    H = lidar_centered * gps_centered';
-    [U, ~, V] = svd(H);
-    R = V * U';
-    t = gps_centroid - R * lidar_centroid;
-    
-    % Construir matriz de transformación homogénea
-    T_lidar_to_gps = [R, t; 0, 0, 0, 1];
 end
 ```
 
@@ -615,6 +637,7 @@ end
 ### RTK-GPS Technical
 
 6. **Takasu, T., & Yasuda, A.** (2009). "Development of the low-cost RTK-GPS receiver with an open source program package RTKLIB." *International symposium on GPS/GNSS*.
+
 
 
 **📄 Licencia:** Este proyecto de investigación está bajo licencia académica. Los resultados y código pueden ser utilizados para fines educativos y de investigación con la debida atribución.
