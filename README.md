@@ -1,36 +1,3 @@
-## 📝 Plan de Trabajo de la Estancia
-
-### Cronograma (12 semanas)
-
-**Semanas 1-2: Revisión bibliográfica y setup**
-- [ ] Estado del arte en fusión RTK-GPS/LiDAR
-- [ ] Configuración del entorno MATLAB
-- [ ] Obtención/generación de datasets de prueba
-
-**Semanas 3-4: Implementación de algoritmos base**
-- [ ] Odometría LiDAR (ICP y NDT)
-- [ ] Procesamiento de datos RTK-GPS
-- [ ] Calibración extrínseca LiDAR-GPS
-
-**Semanas 5-7: Desarrollo del algoritmo de fusión**
-- [ ] Implementación EKF para pose estimation
-- [ ] Modelos de ruido adaptativos
-- [ ] Manejo de outliers y pérdidas de señal
-
-**Semanas 8-9: Validación y optimización**
-- [ ] Experimentos en datasets reales
-- [ ] Optimización de parámetros
-- [ ] Análisis de sensibilidad
-
-**Semanas 10-11: Análisis de resultados**
-- [ ] Evaluación de métricas de rendimiento
-- [ ] Comparación con métodos estado del arte
-- [ ] Análisis de casos límite
-
-**Semana 12: Documentación y presentación**
-- [ ] Reporte técnico final
-- [ ] Presentación de resultados
-- [ ] Preparación de publicación (si aplica)# RTK-GPS + LiDAR Sensor Fusion for Vehicle Pose Estimation
 
 **Estancia de Investigación - Algoritmos de Fusión Sensorial para Localización Vehicular**
 
