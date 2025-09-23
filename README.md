@@ -616,23 +616,6 @@ end
 
 6. **Takasu, T., & Yasuda, A.** (2009). "Development of the low-cost RTK-GPS receiver with an open source program package RTKLIB." *International symposium on GPS/GNSS*.
 
-## 📞 Contacto y Supervisión
-
-**Investigador Principal:**
-- **Nombre**: [Tu nombre]
-- **Institución**: [Universidad/Centro de investigación]
-- **Email**: [tu.email@institucion.edu]
-
-**Supervisor de Estancia:**
-- **Dr./Dra.**: [Nombre del supervisor]
-- **Especialidad**: Robótica y Sistemas Autónomos
-- **Email**: [supervisor@institucion.edu]
-
-**Colaboradores:**
-- **Laboratorio**: [Nombre del laboratorio]
-- **Grupo de investigación**: [Nombre del grupo]
-
----
 
 **📄 Licencia:** Este proyecto de investigación está bajo licencia académica. Los resultados y código pueden ser utilizados para fines educativos y de investigación con la debida atribución.
 
