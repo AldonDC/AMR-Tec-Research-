@@ -91,40 +91,38 @@ Desarrollar un sistema de fusión sensorial multi-modal que integre mediciones R
 
 El sistema implementa una **arquitectura de fusión probabilística** que combina las fortalezas complementarias de ambos sensores:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    PIPELINE DE FUSIÓN                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  RTK-GPS (10Hz)           LiDAR VLP-16 (10Hz)               │
-│      ↓                           ↓                           │
-│  ┌──────────┐              ┌──────────┐                     │
-│  │ Parser   │              │ Prepro-  │                     │
-│  │ NMEA     │              │ cesado   │                     │
-│  │ GGA      │              │ 3D       │                     │
-│  └────┬─────┘              └────┬─────┘                     │
-│       │                         │                           │
-│       │ [lat,lon,alt]           │ [pointCloud]              │
-│       ↓                         ↓                           │
-│  ┌──────────┐              ┌──────────┐                     │
-│  │ Coord.   │              │ NDT/ICP  │                     │
-│  │ WGS84→   │              │ Registro │                     │
-│  │ UTM      │              │ 3D       │                     │
-│  └────┬─────┘              └────┬─────┘                     │
-│       │                         │                           │
-│       │ [x,y,z] UTM            │ [ΔT, ΔR] relativo         │
-│       └────────┬────────────────┘                           │
-│                ↓                                             │
-│       ┌─────────────────┐                                   │
-│       │  FILTRO DE      │                                   │
-│       │  FUSIÓN         │                                   │
-│       │  (Weighted Sum) │                                   │
-│       └────────┬────────┘                                   │
-│                ↓                                             │
-│         [x,y,z,roll,pitch,yaw]                              │
-│         Pose 6DOF estimada                                  │
-└─────────────────────────────────────────────────────────────┘
-```
+```plantuml
+@startuml
+skinparam backgroundColor #0D1117
+skinparam node {
+  BackgroundColor #1F6FEB
+  FontColor white
+  BorderColor #58A6FF
+  FontStyle bold
+  Padding 15
+}
+skinparam arrowColor #C9D1D9
+skinparam defaultFontName JetBrains Mono
+skinparam defaultFontSize 14
+
+title 🧭 PIPELINE DE FUSIÓN SENSORIAL
+
+node "📡 RTK-GPS (10 Hz)\nParser NMEA-GGA\n→ [lat, lon, alt]" as GPS
+node "🌫️ LiDAR VLP-16 (10 Hz)\nPreprocesamiento Nube 3D\n→ [pointCloud]" as LIDAR
+
+node "🌐 Conversión WGS84 → UTM\n→ [x, y, z]" as CONV
+node "📈 Registro 3D (NDT / ICP)\n→ [ΔT, ΔR]" as REG
+
+node "🔀 FILTRO DE FUSIÓN\n(Weighted Sum / KF)" as FUSION
+node "🎯 Pose Estimada\n[x, y, z, roll, pitch, yaw]\n→ 6 DOF" as POSE
+
+GPS --> CONV
+LIDAR --> REG
+CONV --> FUSION
+REG --> FUSION
+FUSION --> POSE
+@enduml
+
 
 ### Algoritmo de Fusión Implementado
 
