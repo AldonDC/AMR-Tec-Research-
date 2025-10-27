@@ -478,44 +478,7 @@ end
 
 ---
 
-### 🎯 Métricas de Rendimiento
 
-<div align="center">
-
-#### 📍 Precisión de Localización
-
-<table>
-<tr>
-<th width="50%">🗺️ Vuelta 1: Mapeo<br><sub>(50% RTK / 50% LiDAR)</sub></th>
-<th width="50%">🎯 Vuelta 2: Localización<br><sub>(85% RTK / 15% LiDAR)</sub></th>
-</tr>
-<tr>
-<td>
-
-```
-✓ Error RMS posición:    12.3 cm
-✓ Error máximo:          45.8 cm
-✓ Desviación estándar:    8.7 cm
-✓ Puntos de mapa:     ~850,000
-```
-
-</td>
-<td>
-
-```
-✅ Error RMS posición:     5.2 cm
-   (Objetivo: <10cm)
-✅ Error máximo:          18.4 cm
-✅ Desviación estándar:    3.8 cm
-✅ Error orientación:      0.8°
-   (Objetivo: <1°)
-```
-
-</td>
-</tr>
-</table>
-
----
 
 #### ⚡ Rendimiento Computacional
 
