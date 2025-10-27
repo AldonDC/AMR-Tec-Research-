@@ -1,13 +1,13 @@
-# 🚗 Estancia de Investigación - Algoritmos de Fusión Sensorial para Localización Vehicular
-
 <div align="center">
 
-[![MATLAB](https://img.shields.io/badge/MATLAB-R2023b+-orange.svg)](https://www.mathworks.com/products/matlab.html)
-[![Velodyne](https://img.shields.io/badge/LiDAR-Velodyne_VLP16-blue.svg)](https://velodynelidar.com/products/puck/)
-[![GPS](https://img.shields.io/badge/GPS-RTK_Enabled-green.svg)]()
-[![License](https://img.shields.io/badge/License-Academic-lightgrey.svg)]()
+![MATLAB RTK-GPS LiDAR SLAM Cover](./assets/matlab_cover.svg)
 
-*Sistema avanzado de localización vehicular mediante fusión RTK-GPS + LiDAR 3D*
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2023b+-orange.svg?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTIyLjUgMTQuNWMtLjcgMC0xLjUuMy0yLjEuOWwtMi45LTEuN2MuNC0uNy42LTEuNS42LTIuNHMtLjItMS43LS42LTIuNGwyLjktMS43Yy42LjUgMS40LjkgMi4xLjkgMS45IDAgMy41LTEuNiAzLjUtMy41UzI0LjQgMS4xIDIyLjUgMS4xUzE5IDIuNyAxOSA0LjZjMCAuNS4xIDEgLjMgMS40bC0yLjkgMS43Yy0uOS0xLjItMi4zLTItMy45LTJzLTMgLjgtMy45IDJsLTIuOS0xLjdjLjItLjQuMy0uOS4zLTEuNCAwLTEuOS0xLjYtMy41LTMuNS0zLjVTLjUgMi43LjUgNC42czEuNiAzLjUgMy41IDMuNWMuNyAwIDEuNS0uMyAyLjEtLjlsMi45IDEuN2MtLjQuNy0uNiAxLjUtLjYgMi40czIgMS43LjYgMi40bC0yLjkgMS43Yy0uNi0uNS0xLjQtLjktMi4xLS45LTEuOSAwLTMuNSAxLjYtMy41IDMuNVM0LjEgMjEuNCA2IDIxLjRzMy41LTEuNiAzLjUtMy41YzAtLjUtLjEtMS0uMy0xLjRsMi45LTEuN2MuOSAxLjIgMi4zIDIgMy45IDJzMy0uOCAzLjktMmwyLjkgMS43Yy0uMi40LS4zLjktLjMgMS40IDAgMS45IDEuNiAzLjUgMy41IDMuNXMzLjUtMS42IDMuNS0zLjUtMS42LTMuNS0zLjUtMy41eiIvPjwvc3ZnPg==)](https://www.mathworks.com/products/matlab.html)
+[![Velodyne](https://img.shields.io/badge/LiDAR-Velodyne_VLP16-blue.svg?style=for-the-badge)](https://velodynelidar.com/products/puck/)
+[![GPS](https://img.shields.io/badge/GPS-RTK_Enabled-green.svg?style=for-the-badge)]()
+[![License](https://img.shields.io/badge/License-Academic-lightgrey.svg?style=for-the-badge)]()
+
+---
 
 [Características](#-características-principales) •
 [Instalación](#-instalación-y-configuración) •
@@ -437,55 +437,137 @@ end
 
 ---
 
-## 📈 Resultados Experimentales
+## 🎬 Resultados Experimentales
 
-### Dataset de Prueba
+### � Videos Demostrativos
+
+<div align="center">
+
+<table>
+<tr>
+<td width="50%" align="center">
+
+### 🗺️ Mapeo 3D - Vuelta 1
+[![Mapeo 3D Vuelta 1](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-blue?style=for-the-badge)](./results/videos/mapeo_v1.mp4)
+
+*Construcción del mapa 3D con fusión 50% RTK + 50% LiDAR*
+
+</td>
+<td width="50%" align="center">
+
+### 🎯 Localización - Vuelta 2
+[![Localización Vuelta 2](https://img.shields.io/badge/▶️_Ver_Video-Localización-green?style=for-the-badge)](./results/videos/localizacion_v2.mp4)
+
+*Localización precisa con fusión 85% RTK + 15% LiDAR*
+
+</td>
+</tr>
+</table>
+
+#### 🌐 Vista Completa del Sistema
+
+[![Demo Completo](https://img.shields.io/badge/▶️_DEMO_COMPLETO-Sistema_RTK_LiDAR_SLAM-orange?style=for-the-badge&logo=youtube)](./results/videos/demo_completo.mp4)
+
+*Visualización completa del pipeline: Mapeo + Localización + Corrección de Deriva*
+
+---
+
+### 📊 Visualizaciones Principales
+
+<p align="center">
+  <img src="./results/figures/trajectory_comparison.png" alt="Comparación de Trayectorias" width="45%">
+  <img src="./results/figures/3d_map_with_trajectories.png" alt="Mapa 3D Completo" width="45%">
+</p>
+
+<p align="center">
+  <img src="./results/figures/rtk_trajectory_2d.png" alt="Trayectoria RTK 2D" width="45%">
+  <img src="./results/figures/error_analysis.png" alt="Análisis de Errores" width="45%">
+</p>
+
+</div>
+
+---
+
+### 📈 Dataset de Prueba
 
 **Características del recorrido:**
 ```
-Archivo: recorrido_20250829_163719.mat
-├── Duración: ~240 segundos
-├── Frames capturados: 2,400 (10 Hz)
-├── Distancia recorrida: ~500 metros
-├── Tipo de trayectoria: Circuito cerrado (2 vueltas)
-├── Entorno: Exterior urbano con vegetación
-└── Condiciones GPS: RTK-Fixed 95% del tiempo
+📁 Archivo: recorrido_20250829_163719.mat
+├── ⏱️  Duración: ~240 segundos
+├── 📸 Frames capturados: 2,400 (10 Hz)
+├── 📏 Distancia recorrida: ~500 metros
+├── 🔄 Tipo de trayectoria: Circuito cerrado (2 vueltas)
+├── 🌳 Entorno: Exterior urbano con vegetación
+└── 📡 Condiciones GPS: RTK-Fixed 95% del tiempo
 ```
 
-### Métricas de Rendimiento
+---
 
-**Precisión de Localización:**
-```
-Vuelta 1 (Mapeo - 50% RTK / 50% LiDAR):
-├── Error RMS posición:  12.3 cm
-├── Error máximo:        45.8 cm
-└── Desviación estándar:  8.7 cm
+### 🎯 Métricas de Rendimiento
 
-Vuelta 2 (Localización - 85% RTK / 15% LiDAR):
-├── Error RMS posición:   5.2 cm  ✅ (objetivo <10cm)
-├── Error máximo:        18.4 cm
-├── Desviación estándar:  3.8 cm
-└── Error RMS orientación: 0.8°   ✅ (objetivo <1°)
-```
+<div align="center">
 
-**Rendimiento Computacional:**
+#### 📍 Precisión de Localización
+
+<table>
+<tr>
+<th width="50%">🗺️ Vuelta 1: Mapeo<br><sub>(50% RTK / 50% LiDAR)</sub></th>
+<th width="50%">🎯 Vuelta 2: Localización<br><sub>(85% RTK / 15% LiDAR)</sub></th>
+</tr>
+<tr>
+<td>
+
 ```
-Hardware: Intel i7-11800H (8 cores) + 32GB RAM + SSD
-├── Procesamiento por frame: 45-55 ms
-├── Frecuencia efectiva: 18-22 fps (objetivo >5 Hz) ✅
-├── Tiempo total Vuelta 1: 42 segundos
-├── Tiempo total Vuelta 2: 38 segundos  
-└── Ratio tiempo real: 1:6 (6x más rápido que captura)
+✓ Error RMS posición:    12.3 cm
+✓ Error máximo:          45.8 cm
+✓ Desviación estándar:    8.7 cm
+✓ Puntos de mapa:     ~850,000
 ```
 
-**Robustez ante Pérdida GPS:**
+</td>
+<td>
+
 ```
-Simulación de dropout GPS (30 segundos):
-├── Error sin GPS (solo LiDAR): 34.2 cm RMS
-├── Recuperación tras re-adquisición: <5 frames
-├── Deriva máxima acumulada: 52.1 cm
-└── Conclusión: Sistema mantiene <50cm sin GPS ✅
+✅ Error RMS posición:     5.2 cm
+   (Objetivo: <10cm)
+✅ Error máximo:          18.4 cm
+✅ Desviación estándar:    3.8 cm
+✅ Error orientación:      0.8°
+   (Objetivo: <1°)
 ```
+
+</td>
+</tr>
+</table>
+
+---
+
+#### ⚡ Rendimiento Computacional
+
+```
+🖥️  Hardware: Intel i7-11800H (8 cores) + 32GB RAM + SSD
+
+⏱️  Procesamiento por frame:      45-55 ms
+🚀 Frecuencia efectiva:           18-22 fps  ✅ (objetivo >5 Hz)
+⏳ Tiempo total Vuelta 1:         42 segundos
+⏳ Tiempo total Vuelta 2:         38 segundos  
+📊 Ratio tiempo real:             1:6 (6x más rápido que captura)
+```
+
+---
+
+#### 🛡️ Robustez ante Pérdida GPS
+
+```
+🔬 Simulación de dropout GPS (30 segundos):
+
+📍 Error sin GPS (solo LiDAR):       34.2 cm RMS
+⚡ Recuperación tras re-adquisición:  <5 frames (0.5 seg)
+📉 Deriva máxima acumulada:          52.1 cm
+✅ Conclusión: Sistema mantiene precisión <50cm sin GPS
+```
+
+</div>
 
 ---
 
