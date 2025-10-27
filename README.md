@@ -29,92 +29,12 @@
 
 ---
 
-### 🎯 Quick Stats
-
-| Métrica | Valor |
-|---------|-------|
-| 📍 **Precisión de Localización** | **5.2 cm RMS** |
-| ⚡ **Frecuencia de Procesamiento** | **18-22 Hz** |
-| 🗺️ **Cobertura del Mapa** | 50m × 40m × 8m |
-| 📊 **Frames Procesados** | 2,400 frames |
-| 🎯 **Tasa de Éxito RTK** | 95% (RTK-Fixed) |
-
-</div>
-
----
-
 ## 🎬 Demo y Resultados Visuales
+### 🎥 GIFs y Visualizaciones
 
-### 📹 Videos Demostrativos
+> He reemplazado los videos embebidos por GIFs y visualizaciones directas en el repositorio. Las imágenes estáticas y GIFs se pueden ver directamente en la carpeta `docs/images` y `docs/gifs`.
 
-<div align="center">
-
-#### 🗺️ Mapeo 3D en Tiempo Real (Vuelta 1)
-[![Mapeo LiDAR](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
-
-*Construcción del mapa 3D mediante fusión RTK-GPS (50%) + LiDAR (50%)*
-
----
-
-#### 🎯 Localización Precisa (Vuelta 2)
-[![Localización](https://img.shields.io/badge/▶️_Ver_Video-Localización-blue?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
-
-*Localización en el mapa con fusión RTK-GPS (85%) + LiDAR (15%)*
-
----
-
-#### 🔄 Comparación de Trayectorias V1 vs V2
-[![Comparación](https://img.shields.io/badge/▶️_Ver_Video-Comparación-green?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
-
-*Análisis de consistencia espacial entre ambas vueltas*
-
-</div>
-
-### 🖼️ Resultados Visuales
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/mapa_3d_final.png" alt="Mapa 3D" width="100%"/>
-      <br />
-      <strong>Mapa 3D Generado</strong>
-      <br />
-      <em>156,847 puntos | Resolución 30cm</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/trajectory_comparison.png" alt="Trayectorias" width="100%"/>
-      <br />
-      <strong>Comparación de Trayectorias</strong>
-      <br />
-      <em>V1 (rosa) vs V2 (verde) | Coincidencia 94.3%</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/rtk_trajectory_2d.png" alt="RTK 2D" width="100%"/>
-      <br />
-      <strong>Trayectoria RTK-GPS</strong>
-      <br />
-      <em>Ground truth satelital</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/error_analysis.png" alt="Análisis de Error" width="100%"/>
-      <br />
-      <strong>Análisis de Error RMS</strong>
-      <br />
-      <em>V1: 12.3cm | V2: 5.2cm</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">
-      <img src="docs/images/pipeline_slam_4_etapas.png" alt="Pipeline SLAM" width="80%"/>
-      <br />
-      <strong>Pipeline de Procesamiento Completo</strong>
-      <br />
-      <em>RANSAC → Downsampling → NDT/ICP → Fusión RTK</em>
-    </td>
-  </tr>
-</table>
+<!-- Nota: los GIFs animados están disponibles más abajo en la sección "GIFs de Procesamiento" -->
 
 ### 📊 Visualización Interactiva del Mapa 3D
 
@@ -142,68 +62,7 @@ view(45, 30);
 
 </div>
 
-### 📈 Gráficas de Métricas de Rendimiento
-
-<details>
-<summary><b>📊 Ver Gráficas Detalladas (Click para expandir)</b></summary>
-
-#### Error de Posición a lo Largo del Recorrido
-```
-Error RMS (cm)
-    50 |                                    ╭─────╮
-       |                                ╭───╯     ╰──╮
-    40 |                            ╭───╯             ╰─╮
-       |                        ╭───╯                   ╰──╮
-    30 |                    ╭───╯                           ╰─╮
-       |                ╭───╯                                 ╰──╮
-    20 |            ╭───╯          VUELTA 1 (Mapeo)             ╰─╮
-       |        ╭───╯                                               ╰──╮
-    10 |    ╭───╯─────────────────────────────────────────────────────╰──╮
-       |╭───╯                    VUELTA 2 (Localización)                 ╰───╮
-     0 └────────────────────────────────────────────────────────────────────
-       0    200   400   600   800  1000  1200  1400  1600  1800  2000  2200
-                                   Frame Number
-```
-
-#### Distribución de Errores (Histograma)
-```
-Frecuencia
-   500 |     ████
-   450 |     ████
-   400 |     ████
-   350 |     ████  ███
-   300 |     ████  ███
-   250 |     ████  ███  ██
-   200 |  █  ████  ███  ██
-   150 |  █  ████  ███  ██  █
-   100 |  █  ████  ███  ██  █
-    50 |  █  ████  ███  ██  █  █
-     0 └──────────────────────────────
-        0-5  5-10 10-15 15-20 20-25 >25
-              Error de Posición (cm)
-              
-   Media: 5.2 cm | Mediana: 4.8 cm | Moda: 4.5 cm
-```
-
-#### Tiempo de Procesamiento por Frame
-```
-Tiempo (ms)
-    80 |
-    70 |                  ╱╲    ╱╲
-    60 |                ╱╱  ╲  ╱  ╲╲
-    50 |     ╱╲      ╱╱      ╲╱      ╲╲      ╱╲
-    40 |   ╱╱  ╲╲  ╱╱                  ╲╲  ╱╱  ╲╲
-    30 | ╱╱      ╲╲╱                      ╲╲╱      ╲╲
-    20 |╱                                            ╲
-    10 |
-     0 └─────────────────────────────────────────────
-       0        500       1000      1500      2000
-                      Frame Number
-                      
-   Promedio: 48.3 ms/frame | Frecuencia: 20.7 Hz
-```
-
-</details>
+<!-- Se han eliminado las gráficas detalladas incrustadas. Los plots y figuras están disponibles en `results/figures` y pueden abrirse directamente desde el repositorio. -->
 
 ### 🎯 Comparación Visual: Con vs Sin Fusión RTK
 
