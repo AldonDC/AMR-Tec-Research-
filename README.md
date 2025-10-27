@@ -444,7 +444,11 @@ end
 
 <p align="center">
   <img src="./results/figures/trajectory_comparison.png" alt="Comparación de Trayectorias" width="45%">
-  <img src="./results/figures/3d_map_with_trajectories.png" alt="Mapa 3D Completo" width="45%">
+<p align="center">
+  <img src="./results/figures/3d_map_with_trajectories.png" alt="Mapa 3D Completo" width="45%" />
+  <img src="https://github.com/user-attachments/assets/afb9b11f-9dad-4363-963e-9c6451b6240d" alt="Mapa 3D Visualización" width="45%" />
+</p>
+
 </p>
 
 <p align="center">
