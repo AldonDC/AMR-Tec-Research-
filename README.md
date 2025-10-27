@@ -443,16 +443,18 @@ end
 ### 📊 Visualizaciones Principales
 
 <p align="center">
-  <img src="./results/figures/3d_map_with_trajectories.png" alt="Mapa 3D Completo" width="45%" />
   <img src="https://github.com/user-attachments/assets/afb9b11f-9dad-4363-963e-9c6451b6240d" alt="Mapa 3D Visualización" width="45%" />
 </p>
 
 </p>
 
 <p align="center">
-  <img src="./results/figures/rtk_trajectory_2d.png" alt="Trayectoria RTK 2D" width="45%" />
-  <img src="https://github.com/user-attachments/assets/523f5b0d-a60a-4e9d-8bbb-ab111ac3628f" alt="Visualización RTK 2D" width="45%" />
+  <img src="https://github.com/user-attachments/assets/0dbce825-d9e5-46a8-ab5e-80f09b17e5fb" 
+       alt="Recorrido 2D - Mapa Satelital" width="80%" />
+  <br/>
+  <em>Figura 1. Recorrido 2D sobre mapa satelital</em>
 </p>
+
 
 </div>
 
