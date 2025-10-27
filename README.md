@@ -72,9 +72,62 @@
 
 ### 🖼️ Resultados Visuales
 
+<table>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/images/mapa_3d_final.png" alt="Mapa 3D" width="100%"/>
+      <br />
+      <strong>Mapa 3D Generado</strong>
+      <br />
+      <em>156,847 puntos | Resolución 30cm</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/images/trajectory_comparison.png" alt="Trayectorias" width="100%"/>
+      <br />
+      <strong>Comparación de Trayectorias</strong>
+      <br />
+      <em>V1 (rosa) vs V2 (verde) | Coincidencia 94.3%</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" width="50%">
+      <img src="docs/images/rtk_trajectory_2d.png" alt="RTK 2D" width="100%"/>
+      <br />
+      <strong>Trayectoria RTK-GPS</strong>
+      <br />
+      <em>Ground truth satelital</em>
+    </td>
+    <td align="center" width="50%">
+      <img src="docs/images/error_analysis.png" alt="Análisis de Error" width="100%"/>
+      <br />
+      <strong>Análisis de Error RMS</strong>
+      <br />
+      <em>V1: 12.3cm | V2: 5.2cm</em>
+    </td>
+  </tr>
+  <tr>
+    <td align="center" colspan="2">
+      <img src="docs/images/pipeline_slam_4_etapas.png" alt="Pipeline SLAM" width="80%"/>
+      <br />
+      <strong>Pipeline de Procesamiento Completo</strong>
+      <br />
+      <em>RANSAC → Downsampling → NDT/ICP → Fusión RTK</em>
+    </td>
+  </tr>
+</table>
 
+### 📊 Visualización Interactiva del Mapa 3D
 
-
+```matlab
+% Cargar y visualizar el mapa 3D generado
+pc_map = pcread('results/mapa_3d_final.ply');
+figure('Position', [100 100 1200 800]);
+pcshow(pc_map, 'MarkerSize', 30);
+title('Mapa 3D LiDAR - Fusión RTK+VLP16');
+xlabel('X [m]'); ylabel('Y [m]'); zlabel('Z [m]');
+colormap('jet'); colorbar;
+view(45, 30);
+```
 
 ### 🎥 GIFs de Procesamiento
 
@@ -626,126 +679,52 @@ end
 
 ## 📈 Resultados Experimentales
 
-### 🗂️ Dataset de Prueba
+### Dataset de Prueba
 
-<div align="center">
-
-**Recorrido Experimental: `recorrido_20250829_163719.mat`**
-
-| Parámetro | Valor |
-|-----------|-------|
-| 📅 **Fecha de Captura** | 29 de Agosto, 2025 |
-| ⏱️ **Duración Total** | 240 segundos (4 minutos) |
-| 🎞️ **Frames Capturados** | 2,400 frames @ 10 Hz |
-| 📏 **Distancia Recorrida** | ~500 metros |
-| 🔄 **Tipo de Trayectoria** | Circuito cerrado (2 vueltas) |
-| 🌍 **Entorno** | Exterior urbano con vegetación |
-| 📡 **Condiciones RTK-GPS** | RTK-Fixed 95% del tiempo |
-| 🌀 **Puntos LiDAR/Frame** | ~2,500-5,000 puntos |
-
-</div>
-
-### 🎯 Métricas de Rendimiento Detalladas
-
-#### 📍 Precisión de Localización
-
-<table>
-  <tr>
-    <th width="50%">🗺️ Vuelta 1 (Mapeo)</th>
-    <th width="50%">🎯 Vuelta 2 (Localización)</th>
-  </tr>
-  <tr>
-    <td>
-      <strong>Estrategia:</strong> 50% RTK + 50% LiDAR<br/>
-      <strong>Objetivo:</strong> Construir mapa 3D de referencia<br/>
-      <br/>
-      <code>📊 Error RMS posición:  12.3 cm</code><br/>
-      <code>📈 Error máximo:        45.8 cm</code><br/>
-      <code>📉 Desviación estándar:  8.7 cm</code><br/>
-      <code>⚡ Velocidad media:      2.1 m/s</code><br/>
-      <br/>
-      ⚠️ <em>Balance entre captura de geometría y anclaje GPS</em>
-    </td>
-    <td>
-      <strong>Estrategia:</strong> 85% RTK + 15% LiDAR<br/>
-      <strong>Objetivo:</strong> Localización precisa en mapa<br/>
-      <br/>
-      <code>✅ Error RMS posición:   5.2 cm</code> ⬅️ <strong>Objetivo <10cm</strong><br/>
-      <code>✅ Error máximo:        18.4 cm</code><br/>
-      <code>✅ Desviación estándar:  3.8 cm</code><br/>
-      <code>✅ Error orientación:    0.8°</code> ⬅️ <strong>Objetivo <1°</strong><br/>
-      <br/>
-      🏆 <em>Precisión centimétrica alcanzada</em>
-    </td>
-  </tr>
-</table>
-
-#### ⚡ Rendimiento Computacional
-
-<div align="center">
-
-**Hardware de Prueba:** Intel i7-11800H (8 cores) + 32GB RAM + SSD NVMe
-
-| Métrica | Valor | Objetivo | Estado |
-|---------|-------|----------|--------|
-| ⏱️ **Tiempo por Frame** | 45-55 ms | <200 ms | ✅ 4x mejor |
-| 🔄 **Frecuencia Efectiva** | 18-22 fps | >5 Hz | ✅ 3.6x mejor |
-| 🗺️ **Tiempo Vuelta 1** | 42 segundos | - | - |
-| 🎯 **Tiempo Vuelta 2** | 38 segundos | - | - |
-| 📊 **Ratio Tiempo Real** | 1:6 | - | ⚡ 6x más rápido |
-| 💾 **Uso de RAM** | ~8.5 GB | <16 GB | ✅ |
-| 🖥️ **Uso de CPU** | 65-75% | <90% | ✅ |
-
-</div>
-
-#### 🛡️ Robustez ante Pérdida de Señal GPS
-
-**Escenario de Prueba:** Simulación de dropout GPS durante 30 segundos consecutivos
-
+**Características del recorrido:**
 ```
-┌─────────────────────────────────────────────────────────┐
-│  Fase del Test       │  Método Activo  │  Error RMS     │
-├──────────────────────┼─────────────────┼────────────────┤
-│  0-10s   (GPS OK)    │  RTK + LiDAR    │   5.2 cm  ✅  │
-│  10-40s  (SIN GPS)   │  Solo LiDAR     │  34.2 cm  ⚠️  │
-│  40-45s  (Recovery)  │  RTK + LiDAR    │   8.1 cm  🔄  │
-│  45-60s  (GPS OK)    │  RTK + LiDAR    │   5.4 cm  ✅  │
-└─────────────────────────────────────────────────────────┘
-
-📊 Deriva máxima acumulada:     52.1 cm (30s sin GPS)
-🔄 Tiempo de recuperación:      <5 frames (~0.5s)
-✅ Conclusión: Sistema mantiene precisión <50cm sin GPS
+Archivo: recorrido_20250829_163719.mat
+├── Duración: ~240 segundos
+├── Frames capturados: 2,400 (10 Hz)
+├── Distancia recorrida: ~500 metros
+├── Tipo de trayectoria: Circuito cerrado (2 vueltas)
+├── Entorno: Exterior urbano con vegetación
+└── Condiciones GPS: RTK-Fixed 95% del tiempo
 ```
 
-### 🎨 Calidad del Mapa 3D Generado
+### Métricas de Rendimiento
 
-<div align="center">
+**Precisión de Localización:**
+```
+Vuelta 1 (Mapeo - 50% RTK / 50% LiDAR):
+├── Error RMS posición:  12.3 cm
+├── Error máximo:        45.8 cm
+└── Desviación estándar:  8.7 cm
 
-| Parámetro del Mapa | Valor | Descripción |
-|---------------------|-------|-------------|
-| 📊 **Puntos Totales** | 156,847 | Después de filtrado y voxelización |
-| 📏 **Resolución** | 30 cm | Tamaño de voxel grid |
-| 📐 **Cobertura Espacial** | 50m × 40m × 8m | Volumen total mapeado |
-| 🏗️ **Objetos Detectados** | Edificios, árboles, postes, vallas | Segmentación implícita |
-| ✨ **Calidad** | Sin puntos fantasma | Filtrado espacial efectivo |
-| 🎯 **Densidad de Puntos** | 15-20 pts/m² | Óptima para navegación |
+Vuelta 2 (Localización - 85% RTK / 15% LiDAR):
+├── Error RMS posición:   5.2 cm  ✅ (objetivo <10cm)
+├── Error máximo:        18.4 cm
+├── Desviación estándar:  3.8 cm
+└── Error RMS orientación: 0.8°   ✅ (objetivo <1°)
+```
 
-</div>
+**Rendimiento Computacional:**
+```
+Hardware: Intel i7-11800H (8 cores) + 32GB RAM + SSD
+├── Procesamiento por frame: 45-55 ms
+├── Frecuencia efectiva: 18-22 fps (objetivo >5 Hz) ✅
+├── Tiempo total Vuelta 1: 42 segundos
+├── Tiempo total Vuelta 2: 38 segundos  
+└── Ratio tiempo real: 1:6 (6x más rápido que captura)
+```
 
-### 🔄 Análisis de Consistencia entre Vueltas
-
-```matlab
-% Métrica de similitud espacial entre V1 y V2
-coincidence_index = computeTrajectorySimilarity(traj_v1, traj_v2);
-% Resultado: 94.3% de coincidencia espacial ✅
-
-% Desviación promedio punto a punto
-mean_deviation = mean(vecnorm(traj_v2 - traj_v1, 2, 2));
-% Resultado: 8.7 cm ± 3.2 cm (Consistencia excelente) ✅
-
-% Máxima desviación detectada
-max_deviation = max(vecnorm(traj_v2 - traj_v1, 2, 2));
-% Resultado: 23.4 cm (En curva cerrada, aceptable) ✅
+**Robustez ante Pérdida GPS:**
+```
+Simulación de dropout GPS (30 segundos):
+├── Error sin GPS (solo LiDAR): 34.2 cm RMS
+├── Recuperación tras re-adquisición: <5 frames
+├── Deriva máxima acumulada: 52.1 cm
+└── Conclusión: Sistema mantiene <50cm sin GPS ✅
 ```
 
 ---
@@ -883,66 +862,10 @@ Agradecimientos especiales a:
 
 ---
 
-## 📸 Nota sobre Recursos Visuales
-
-> **📌 IMPORTANTE:** Este README incluye referencias a imágenes, GIFs y videos demostrativos.
->
-> Para generar todos los recursos visuales, consulta la guía completa en:
-> 📂 [`docs/images/README_IMAGENES.md`](docs/images/README_IMAGENES.md)
->
-> **Recursos que debes generar:**
-> - 🖼️ Imágenes del mapa 3D y trayectorias
-> - 🎬 GIFs animados del pipeline de procesamiento
-> - 📹 Videos demostrativos para YouTube
->
-> **Placeholders actuales:** Los enlaces de YouTube y rutas de imágenes están como placeholders.  
-> Reemplázalos con tus propios recursos siguiendo la guía.
-
----
-
 <div align="center">
-
-<!-- BADGES DE REDES SOCIALES -->
-<p align="center">
-  <a href="https://www.linkedin.com/in/TU_PERFIL">
-    <img src="https://img.shields.io/badge/LinkedIn-Conectar-blue?style=for-the-badge&logo=linkedin" alt="LinkedIn"/>
-  </a>
-  <a href="https://github.com/TU_USUARIO">
-    <img src="https://img.shields.io/badge/GitHub-Seguir-black?style=for-the-badge&logo=github" alt="GitHub"/>
-  </a>
-  <a href="mailto:tu_email@universidad.edu">
-    <img src="https://img.shields.io/badge/Email-Contacto-red?style=for-the-badge&logo=gmail" alt="Email"/>
-  </a>
-</p>
-
----
-
-### 🌟 Estadísticas del Proyecto
-
-<p align="center">
-  <img src="https://img.shields.io/github/stars/TU_USUARIO/estancia-fusion-sensorial?style=social" alt="GitHub stars"/>
-  <img src="https://img.shields.io/github/forks/TU_USUARIO/estancia-fusion-sensorial?style=social" alt="GitHub forks"/>
-  <img src="https://img.shields.io/github/watchers/TU_USUARIO/estancia-fusion-sensorial?style=social" alt="GitHub watchers"/>
-</p>
-
----
 
 **⭐ Si este proyecto te resulta útil, considera darle una estrella en GitHub ⭐**
 
-<h3>
-  <em>"Fusión sensorial para el futuro de la conducción autónoma"</em>
-</h3>
-
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" alt="MATLAB" width="60"/>
-
 *Última actualización: Octubre 2025*
-
----
-
-### 📊 Métricas Rápidas del Proyecto
-
-```
-📍 Precisión: 5.2cm RMS  |  ⚡ Velocidad: 18-22 Hz  |  🗺️ Mapa: 156K puntos
-```
 
 </div>
