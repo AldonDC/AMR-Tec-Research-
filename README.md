@@ -91,13 +91,8 @@ Desarrollar un sistema de fusión sensorial multi-modal que integre mediciones R
 
 El sistema implementa una **arquitectura de fusión probabilística** que combina las fortalezas complementarias de ambos sensores:
 
-```mermaid
-flowchart TD
-  A[📡 RTK-GPS (10 Hz)\nParser NMEA‑GGA\n(lat, lon, alt)] --> B[🌐 Conversión WGS84 → UTM\n(x, y, z)]
-  C[🌫️ LiDAR VLP‑16 (10 Hz)\nPreprocesamiento Nube 3D\n(pointCloud)] --> D[📈 Registro 3D (NDT / ICP)\n(ΔT, ΔR)]
-  B --> E[🔀 Filtro de Fusión\n(Weighted Sum / Kalman Filter)]
-  D --> E
-  E --> F[🎯 Pose Estimada\n(x, y, z, roll, pitch, yaw)\n6 DOF]
+<img width="763" height="814" alt="image" src="https://github.com/user-attachments/assets/8922ac84-9939-4a75-b0cc-bc4e4e31a0d5" />
+
 ---
 
 
