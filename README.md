@@ -594,37 +594,6 @@ end
 
 ---
 
-## 📁 Estructura del Repositorio
-
-```
-Estancia_Investigacion-2025/
-│
-├── README.md                          # Este archivo
-│
-├── scripts/                           # Scripts principales de captura y procesamiento
-│   ├── lidar_slam_3d_rtk_professional_v_clusters_mejorado.m
-│   ├── analizar_metodologia_dos_pasadas.m
-│   └── visualizar_pipeline_slam_4_etapas.m
-│
-├── data/                              # Datasets capturados
-│   └── recorrido_20250829_163719.mat  # Ejemplo de captura RTK+LiDAR
-│
-├── results/                           # Resultados experimentales
-│   ├── mapa_3d_final.ply
-│   ├── trayectoria_v1_mapeo.csv
-│   └── trayectoria_v2_localizacion.csv
-│
-├── docs/                              # Documentación técnica
-│   ├── INTEGRACION_CODIGO_EFECTIVO_164410.md
-│   ├── GUIA_NAVEGACION_AMR.md
-│   ├── MEJORAS_LIMPIEZA_MAPAS.md
-│   ├── FIX_PUNTOS_DISPERSOS_V1.md
-│   └── presentacion_slam.tex
-│
-└── tests/                             # Scripts de validación
-    ├── test_ndt_registration.m
-    └── analyze_trajectory_characteristics.m
-```
 
 ---
 
