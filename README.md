@@ -443,8 +443,11 @@ end
 ### 📊 Visualizaciones Principales
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/afb9b11f-9dad-4363-963e-9c6451b6240d" alt="Mapa 3D Visualización" width="45%" />
+  <img src="https://github.com/user-attachments/assets/afb9b11f-9dad-4363-963e-9c6451b6240d" 
+       alt="Mapa 3D - Visualización de Trayectorias" 
+       width="80%" />
 </p>
+
 
 </p>
 
