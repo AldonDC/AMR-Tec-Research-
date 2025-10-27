@@ -409,7 +409,7 @@ end
 
 ## 🎬 Resultados Experimentales
 
-### � Videos Demostrativos
+###  Videos Demostrativos
 
 <div align="center">
 
