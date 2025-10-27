@@ -29,12 +29,6 @@
 
 ---
 
-## 🎬 Demo y Resultados Visuales
-### 🎥 GIFs y Visualizaciones
-
-> He reemplazado los videos embebidos por GIFs y visualizaciones directas en el repositorio. Las imágenes estáticas y GIFs se pueden ver directamente en la carpeta `docs/images` y `docs/gifs`.
-
-<!-- Nota: los GIFs animados están disponibles más abajo en la sección "GIFs de Procesamiento" -->
 
 ### 📊 Visualización Interactiva del Mapa 3D
 
