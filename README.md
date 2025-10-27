@@ -72,62 +72,9 @@
 
 ### 🖼️ Resultados Visuales
 
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/mapa_3d_final.png" alt="Mapa 3D" width="100%"/>
-      <br />
-      <strong>Mapa 3D Generado</strong>
-      <br />
-      <em>156,847 puntos | Resolución 30cm</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/trajectory_comparison.png" alt="Trayectorias" width="100%"/>
-      <br />
-      <strong>Comparación de Trayectorias</strong>
-      <br />
-      <em>V1 (rosa) vs V2 (verde) | Coincidencia 94.3%</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/rtk_trajectory_2d.png" alt="RTK 2D" width="100%"/>
-      <br />
-      <strong>Trayectoria RTK-GPS</strong>
-      <br />
-      <em>Ground truth satelital</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/error_analysis.png" alt="Análisis de Error" width="100%"/>
-      <br />
-      <strong>Análisis de Error RMS</strong>
-      <br />
-      <em>V1: 12.3cm | V2: 5.2cm</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">
-      <img src="docs/images/pipeline_slam_4_etapas.png" alt="Pipeline SLAM" width="80%"/>
-      <br />
-      <strong>Pipeline de Procesamiento Completo</strong>
-      <br />
-      <em>RANSAC → Downsampling → NDT/ICP → Fusión RTK</em>
-    </td>
-  </tr>
-</table>
 
-### 📊 Visualización Interactiva del Mapa 3D
 
-```matlab
-% Cargar y visualizar el mapa 3D generado
-pc_map = pcread('results/mapa_3d_final.ply');
-figure('Position', [100 100 1200 800]);
-pcshow(pc_map, 'MarkerSize', 30);
-title('Mapa 3D LiDAR - Fusión RTK+VLP16');
-xlabel('X [m]'); ylabel('Y [m]'); zlabel('Z [m]');
-colormap('jet'); colorbar;
-view(45, 30);
-```
+
 
 ### 🎥 GIFs de Procesamiento
 
