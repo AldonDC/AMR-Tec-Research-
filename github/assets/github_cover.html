@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MATLAB RTK-GPS LiDAR SLAM Cover</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            background: linear-gradient(135deg, #0076A8 0%, #003d5c 50%, #00283d 100%);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+        }
+        
+        .cover-container {
+            width: 1280px;
+            height: 640px;
+            background: linear-gradient(135deg, #0076A8 0%, #004d6d 100%);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+        }
+        
+        /* Grid Background Pattern */
+        .grid-background {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.05) 1px, transparent 1px);
+            background-size: 40px 40px;
+            opacity: 0.3;
+        }
+        
+        /* MATLAB Logo */
+        .matlab-logo {
+            position: absolute;
+            top: 40px;
+            left: 50px;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            z-index: 10;
+        }
+        
+        .matlab-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #FF6B35 0%, #FF8C42 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(255, 107, 53, 0.4);
+        }
+        
+        .matlab-icon svg {
+            width: 60px;
+            height: 60px;
+            fill: white;
+        }
+        
+        .matlab-text {
+            font-size: 42px;
+            font-weight: bold;
+            color: white;
+            letter-spacing: -1px;
+        }
+        
+        /* Main Content */
+        .content {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+            z-index: 10;
+            width: 90%;
+        }
+        
+        .title {
+            font-size: 56px;
+            font-weight: 800;
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            line-height: 1.2;
+        }
+        
+        .subtitle {
+            font-size: 32px;
+            font-weight: 400;
+            color: #FFD700;
+            margin-bottom: 30px;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.3);
+        }
+        
+        .description {
+            font-size: 24px;
+            color: rgba(255,255,255,0.9);
+            max-width: 900px;
+            margin: 0 auto 40px;
+            line-height: 1.5;
+        }
+        
+        /* Tech Stack Icons */
+        .tech-stack {
+            display: flex;
+            justify-content: center;
+            gap: 40px;
+            margin-top: 40px;
+        }
+        
+        .tech-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .tech-icon {
+            width: 60px;
+            height: 60px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            backdrop-filter: blur(10px);
+            border: 2px solid rgba(255,255,255,0.3);
+            transition: all 0.3s ease;
+        }
+        
+        .tech-icon:hover {
+            background: rgba(255,255,255,0.25);
+            transform: translateY(-5px);
+        }
+        
+        .tech-icon svg {
+            width: 35px;
+            height: 35px;
+            fill: white;
+        }
+        
+        .tech-label {
+            color: white;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        /* Decorative Elements */
+        .deco-circle {
+            position: absolute;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%);
+        }
+        
+        .circle-1 {
+            width: 400px;
+            height: 400px;
+            top: -200px;
+            right: -100px;
+        }
+        
+        .circle-2 {
+            width: 300px;
+            height: 300px;
+            bottom: -150px;
+            left: -100px;
+        }
+        
+        /* Animated Scan Lines */
+        .scan-line {
+            position: absolute;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, #FFD700, transparent);
+            animation: scan 4s linear infinite;
+        }
+        
+        @keyframes scan {
+            0% { top: 0; }
+            100% { top: 100%; }
+        }
+    </style>
+</head>
+<body>
+    <div class="cover-container">
+        <!-- Grid Background -->
+        <div class="grid-background"></div>
+        
+        <!-- Decorative Circles -->
+        <div class="deco-circle circle-1"></div>
+        <div class="deco-circle circle-2"></div>
+        
+        <!-- Scan Line Effect -->
+        <div class="scan-line"></div>
+        
+        <!-- MATLAB Logo -->
+        <div class="matlab-logo">
+            <div class="matlab-icon">
+                <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M22.5 14.5c-.7 0-1.5.3-2.1.9l-2.9-1.7c.4-.7.6-1.5.6-2.4s-.2-1.7-.6-2.4l2.9-1.7c.6.5 1.4.9 2.1.9 1.9 0 3.5-1.6 3.5-3.5S24.4 1.1 22.5 1.1 19 2.7 19 4.6c0 .5.1 1 .3 1.4l-2.9 1.7c-.9-1.2-2.3-2-3.9-2s-3 .8-3.9 2l-2.9-1.7c.2-.4.3-.9.3-1.4 0-1.9-1.6-3.5-3.5-3.5S.5 2.7.5 4.6s1.6 3.5 3.5 3.5c.7 0 1.5-.3 2.1-.9l2.9 1.7c-.4.7-.6 1.5-.6 2.4s.2 1.7.6 2.4l-2.9 1.7c-.6-.5-1.4-.9-2.1-.9-1.9 0-3.5 1.6-3.5 3.5S2.1 21.4 4 21.4s3.5-1.6 3.5-3.5c0-.5-.1-1-.3-1.4l2.9-1.7c.9 1.2 2.3 2 3.9 2s3-.8 3.9-2l2.9 1.7c-.2.4-.3.9-.3 1.4 0 1.9 1.6 3.5 3.5 3.5s3.5-1.6 3.5-3.5-1.6-3.5-3.5-3.5z"/>
+                </svg>
+            </div>
+            <div class="matlab-text">MATLAB</div>
+        </div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <h1 class="title">Algoritmos de Fusión Sensorial<br>RTK-GPS + LiDAR 3D</h1>
+            <div class="subtitle">🎯 Localización Vehicular con Precisión Centimétrica</div>
+            <p class="description">
+                Sistema SLAM avanzado que combina tecnologías RTK-GPS y Velodyne VLP-16<br>
+                para navegación autónoma de alta precisión
+            </p>
+            
+            <!-- Tech Stack -->
+            <div class="tech-stack">
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M12 2L2 7v10c0 5.55 3.84 10.74 10 12 6.16-1.26 10-6.45 10-12V7l-10-5z"/>
+                        </svg>
+                    </div>
+                    <span class="tech-label">RTK-GPS</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="3"/>
+                            <path d="M12 2L4 20h16L12 2z"/>
+                        </svg>
+                    </div>
+                    <span class="tech-label">LiDAR 3D</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M3 13h2v-2H3v2zm0 4h2v-2H3v2zm0-8h2V7H3v2zm4 4h14v-2H7v2zm0 4h14v-2H7v2zM7 7v2h14V7H7z"/>
+                        </svg>
+                    </div>
+                    <span class="tech-label">SLAM</span>
+                </div>
+                <div class="tech-item">
+                    <div class="tech-icon">
+                        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M20 6h-2.18c.11-.31.18-.65.18-1 0-1.66-1.34-3-3-3-1.05 0-1.96.54-2.5 1.35l-.5.67-.5-.68C10.96 2.54 10.05 2 9 2 7.34 2 6 3.34 6 5c0 .35.07.69.18 1H4c-1.11 0-1.99.89-1.99 2L2 19c0 1.11.89 2 2 2h16c1.11 0 2-.89 2-2V8c0-1.11-.89-2-2-2zm-5-2c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zM9 4c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm11 15H4v-2h16v2zm0-5H4V8h5.08L7 10.83 8.62 12 11 8.76l1-1.36 1 1.36L15.38 12 17 10.83 14.92 8H20v6z"/>
+                        </svg>
+                    </div>
+                    <span class="tech-label">NDT/ICP</span>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Add subtle animation on load
+        window.addEventListener('load', () => {
+            document.querySelector('.content').style.animation = 'fadeIn 1s ease-out';
+        });
+        
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes fadeIn {
+                from { opacity: 0; transform: translate(-50%, -45%); }
+                to { opacity: 1; transform: translate(-50%, -50%); }
+            }
+        `;
+        document.head.appendChild(style);
+    </script>
+</body>
+</html>
