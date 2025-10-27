@@ -604,10 +604,7 @@ para fines académicos y de investigación, con las siguientes condiciones:
 ## 🏆 Agradecimientos
 
 Agradecimientos especiales a:
-- Laboratorio de Robótica y Percepción
-- Equipo de soporte técnico de MATLAB
-- Comunidad de desarrolladores de PCL y ROS
-- Revisores y evaluadores de este proyecto de investigación
+
 
 ---
 
