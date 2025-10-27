@@ -87,41 +87,22 @@ Desarrollar un sistema de fusión sensorial multi-modal que integre mediciones R
 
 ## 🧭 Metodología de Fusión Sensorial
 
-### Estrategia de Combinación Multi-Sensor
+### 🔹 Estrategia de Combinación Multi-Sensor
 
 El sistema implementa una **arquitectura de fusión probabilística** que combina las fortalezas complementarias de ambos sensores:
 
-```plantuml
-@startuml
-skinparam backgroundColor #0D1117
-skinparam node {
-  BackgroundColor #1F6FEB
-  FontColor white
-  BorderColor #58A6FF
-  FontStyle bold
-  Padding 15
-}
-skinparam arrowColor #C9D1D9
-skinparam defaultFontName JetBrains Mono
-skinparam defaultFontSize 14
+```mermaid
+flowchart TD
+    A[📡 RTK-GPS (10 Hz)] --> B[Parser NMEA-GGA<br/>→ [lat, lon, alt]]
+    C[🌫️ LiDAR VLP-16 (10 Hz)] --> D[Preprocesamiento Nube 3D<br/>→ [pointCloud]]
 
-title 🧭 PIPELINE DE FUSIÓN SENSORIAL
+    B --> E[🌐 Conversión WGS84 → UTM<br/>→ [x, y, z]]
+    D --> F[📈 Registro 3D (NDT / ICP)<br/>→ [ΔT, ΔR]]
 
-node "📡 RTK-GPS (10 Hz)\nParser NMEA-GGA\n→ [lat, lon, alt]" as GPS
-node "🌫️ LiDAR VLP-16 (10 Hz)\nPreprocesamiento Nube 3D\n→ [pointCloud]" as LIDAR
+    E --> G[🔀 Filtro de Fusión<br/>(Weighted Sum / KF)]
+    F --> G
 
-node "🌐 Conversión WGS84 → UTM\n→ [x, y, z]" as CONV
-node "📈 Registro 3D (NDT / ICP)\n→ [ΔT, ΔR]" as REG
-
-node "🔀 FILTRO DE FUSIÓN\n(Weighted Sum / KF)" as FUSION
-node "🎯 Pose Estimada\n[x, y, z, roll, pitch, yaw]\n→ 6 DOF" as POSE
-
-GPS --> CONV
-LIDAR --> REG
-CONV --> FUSION
-REG --> FUSION
-FUSION --> POSE
-@enduml
+    G --> H[🎯 Pose Estimada<br/>[x, y, z, roll, pitch, yaw]<br/>→ 6 DOF]
 
 
 ### Algoritmo de Fusión Implementado
