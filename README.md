@@ -87,22 +87,25 @@ Desarrollar un sistema de fusión sensorial multi-modal que integre mediciones R
 
 ## 🧭 Metodología de Fusión Sensorial
 
-### 🔹 Estrategia de Combinación Multi-Sensor
+### Estrategia de Combinación Multi-Sensor
 
 El sistema implementa una **arquitectura de fusión probabilística** que combina las fortalezas complementarias de ambos sensores:
 
 ```mermaid
 flowchart TD
-    A[📡 RTK-GPS (10 Hz)] --> B[Parser NMEA-GGA<br/>→ [lat, lon, alt]]
-    C[🌫️ LiDAR VLP-16 (10 Hz)] --> D[Preprocesamiento Nube 3D<br/>→ [pointCloud]]
+    A[📡 RTK-GPS (10 Hz)] --> B[Parser NMEA-GGA<br/>→ (lat, lon, alt)]
+    C[🌫️ LiDAR VLP-16 (10 Hz)] --> D[Preprocesamiento Nube 3D<br/>→ (pointCloud)]
 
-    B --> E[🌐 Conversión WGS84 → UTM<br/>→ [x, y, z]]
-    D --> F[📈 Registro 3D (NDT / ICP)<br/>→ [ΔT, ΔR]]
+    B --> E[🌐 Conversión WGS84 → UTM<br/>→ (x, y, z)]
+    D --> F[📈 Registro 3D (NDT / ICP)<br/>→ (ΔT, ΔR)]
 
     E --> G[🔀 Filtro de Fusión<br/>(Weighted Sum / KF)]
     F --> G
 
-    G --> H[🎯 Pose Estimada<br/>[x, y, z, roll, pitch, yaw]<br/>→ 6 DOF]
+    G --> H[🎯 Pose Estimada<br/>(x, y, z, roll, pitch, yaw)<br/>→ 6 DOF]
+
+
+---
 
 
 ### Algoritmo de Fusión Implementado
