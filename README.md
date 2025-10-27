@@ -1,254 +1,28 @@
-<div align="center">
-
-<!-- PORTADA PRINCIPAL -->
-<img src="https://upload.wikimedia.org/wikipedia/commons/2/21/Matlab_Logo.png" alt="MATLAB Logo" width="120"/>
-
-# 🚗 Estancia de Investigación
-## Algoritmos de Fusión Sensorial para Localización Vehicular
-
-<p align="center">
-  <img src="https://img.shields.io/badge/MATLAB-R2023b+-orange.svg?style=for-the-badge&logo=mathworks" alt="MATLAB"/>
-  <img src="https://img.shields.io/badge/LiDAR-Velodyne_VLP16-0066CC.svg?style=for-the-badge" alt="Velodyne"/>
-  <img src="https://img.shields.io/badge/GPS-RTK_Enabled-00C851.svg?style=for-the-badge" alt="GPS"/>
-  <img src="https://img.shields.io/badge/License-Academic-lightgrey.svg?style=for-the-badge" alt="License"/>
-</p>
-
-<h3>
-  <em>Sistema avanzado de localización vehicular mediante fusión RTK-GPS + LiDAR 3D</em>
-</h3>
-
-<p align="center">
-  <a href="#-características-principales">Características</a> •
-  <a href="#-demo-y-resultados-visuales">Demo & Videos</a> •
-  <a href="#-instalación-y-configuración">Instalación</a> •
-  <a href="#-uso-del-sistema">Uso</a> •
-  <a href="#-algoritmos-implementados">Algoritmos</a> •
-  <a href="#-resultados-experimentales">Resultados</a> •
-  <a href="#-referencias-bibliográficas">Referencias</a>
-</p>
-
----
-
-## 🎬 Demo y Resultados Visuales
-
-### 📹 Videos Demostrativos
+# 🚗 Estancia de Investigación - Algoritmos de Fusión Sensorial para Localización Vehicular
 
 <div align="center">
 
-#### 🗺️ Mapeo 3D en Tiempo Real (Vuelta 1)
-[![Mapeo LiDAR](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-red?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
+[![MATLAB](https://img.shields.io/badge/MATLAB-R2023b+-orange.svg)](https://www.mathworks.com/products/matlab.html)
+[![Velodyne](https://img.shields.io/badge/LiDAR-Velodyne_VLP16-blue.svg)](https://velodynelidar.com/products/puck/)
+[![GPS](https://img.shields.io/badge/GPS-RTK_Enabled-green.svg)]()
+[![License](https://img.shields.io/badge/License-Academic-lightgrey.svg)]()
 
-*Construcción del mapa 3D mediante fusión RTK-GPS (50%) + LiDAR (50%)*
+*Sistema avanzado de localización vehicular mediante fusión RTK-GPS + LiDAR 3D*
 
----
-
-#### 🎯 Localización Precisa (Vuelta 2)
-[![Localización](https://img.shields.io/badge/▶️_Ver_Video-Localización-blue?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
-
-*Localización en el mapa con fusión RTK-GPS (85%) + LiDAR (15%)*
-
----
-
-#### 🔄 Comparación de Trayectorias V1 vs V2
-[![Comparación](https://img.shields.io/badge/▶️_Ver_Video-Comparación-green?style=for-the-badge&logo=youtube)](https://www.youtube.com/watch?v=TU_VIDEO_AQUI)
-
-*Análisis de consistencia espacial entre ambas vueltas*
+[Características](#-características-principales) •
+[Instalación](#-instalación-y-configuración) •
+[Uso](#-uso-del-sistema) •
+[Algoritmos](#-algoritmos-implementados) •
+[Resultados](#-resultados-experimentales) •
+[Referencias](#-referencias-bibliográficas)
 
 </div>
-
-### 🖼️ Resultados Visuales
-
-<table>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/mapa_3d_final.png" alt="Mapa 3D" width="100%"/>
-      <br />
-      <strong>Mapa 3D Generado</strong>
-      <br />
-      <em>156,847 puntos | Resolución 30cm</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/trajectory_comparison.png" alt="Trayectorias" width="100%"/>
-      <br />
-      <strong>Comparación de Trayectorias</strong>
-      <br />
-      <em>V1 (rosa) vs V2 (verde) | Coincidencia 94.3%</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" width="50%">
-      <img src="docs/images/rtk_trajectory_2d.png" alt="RTK 2D" width="100%"/>
-      <br />
-      <strong>Trayectoria RTK-GPS</strong>
-      <br />
-      <em>Ground truth satelital</em>
-    </td>
-    <td align="center" width="50%">
-      <img src="docs/images/error_analysis.png" alt="Análisis de Error" width="100%"/>
-      <br />
-      <strong>Análisis de Error RMS</strong>
-      <br />
-      <em>V1: 12.3cm | V2: 5.2cm</em>
-    </td>
-  </tr>
-  <tr>
-    <td align="center" colspan="2">
-      <img src="docs/images/pipeline_slam_4_etapas.png" alt="Pipeline SLAM" width="80%"/>
-      <br />
-      <strong>Pipeline de Procesamiento Completo</strong>
-      <br />
-      <em>RANSAC → Downsampling → NDT/ICP → Fusión RTK</em>
-    </td>
-  </tr>
-</table>
-
-### 📊 Visualización Interactiva del Mapa 3D
-
-```matlab
-% Cargar y visualizar el mapa 3D generado
-pc_map = pcread('results/mapa_3d_final.ply');
-figure('Position', [100 100 1200 800]);
-pcshow(pc_map, 'MarkerSize', 30);
-title('Mapa 3D LiDAR - Fusión RTK+VLP16');
-xlabel('X [m]'); ylabel('Y [m]'); zlabel('Z [m]');
-colormap('jet'); colorbar;
-view(45, 30);
-```
-
-### 🎥 GIFs de Procesamiento
-
-<div align="center">
-
-| Etapa | Visualización |
-|-------|--------------|
-| **1️⃣ Frame Raw** | ![Frame Original](docs/gifs/frame_raw.gif)<br/>*Nube de puntos sin procesar* |
-| **2️⃣ Filtrado RANSAC** | ![RANSAC](docs/gifs/ransac_filtering.gif)<br/>*Eliminación de suelo* |
-| **3️⃣ Registro NDT** | ![NDT](docs/gifs/ndt_registration.gif)<br/>*Alineación de frames* |
-| **4️⃣ Fusión RTK** | ![Fusión](docs/gifs/rtk_fusion.gif)<br/>*Corrección con GPS* |
-
-</div>
-
-### 📈 Gráficas de Métricas de Rendimiento
-
-<details>
-<summary><b>📊 Ver Gráficas Detalladas (Click para expandir)</b></summary>
-
-#### Error de Posición a lo Largo del Recorrido
-```
-Error RMS (cm)
-    50 |                                    ╭─────╮
-       |                                ╭───╯     ╰──╮
-    40 |                            ╭───╯             ╰─╮
-       |                        ╭───╯                   ╰──╮
-    30 |                    ╭───╯                           ╰─╮
-       |                ╭───╯                                 ╰──╮
-    20 |            ╭───╯          VUELTA 1 (Mapeo)             ╰─╮
-       |        ╭───╯                                               ╰──╮
-    10 |    ╭───╯─────────────────────────────────────────────────────╰──╮
-       |╭───╯                    VUELTA 2 (Localización)                 ╰───╮
-     0 └────────────────────────────────────────────────────────────────────
-       0    200   400   600   800  1000  1200  1400  1600  1800  2000  2200
-                                   Frame Number
-```
-
-#### Distribución de Errores (Histograma)
-```
-Frecuencia
-   500 |     ████
-   450 |     ████
-   400 |     ████
-   350 |     ████  ███
-   300 |     ████  ███
-   250 |     ████  ███  ██
-   200 |  █  ████  ███  ██
-   150 |  █  ████  ███  ██  █
-   100 |  █  ████  ███  ██  █
-    50 |  █  ████  ███  ██  █  █
-     0 └──────────────────────────────
-        0-5  5-10 10-15 15-20 20-25 >25
-              Error de Posición (cm)
-              
-   Media: 5.2 cm | Mediana: 4.8 cm | Moda: 4.5 cm
-```
-
-#### Tiempo de Procesamiento por Frame
-```
-Tiempo (ms)
-    80 |
-    70 |                  ╱╲    ╱╲
-    60 |                ╱╱  ╲  ╱  ╲╲
-    50 |     ╱╲      ╱╱      ╲╱      ╲╲      ╱╲
-    40 |   ╱╱  ╲╲  ╱╱                  ╲╲  ╱╱  ╲╲
-    30 | ╱╱      ╲╲╱                      ╲╲╱      ╲╲
-    20 |╱                                            ╲
-    10 |
-     0 └─────────────────────────────────────────────
-       0        500       1000      1500      2000
-                      Frame Number
-                      
-   Promedio: 48.3 ms/frame | Frecuencia: 20.7 Hz
-```
-
-</details>
-
-### 🎯 Comparación Visual: Con vs Sin Fusión RTK
-
-<table>
-  <tr>
-    <th width="50%">Solo LiDAR (Sin RTK)</th>
-    <th width="50%">Fusión RTK + LiDAR</th>
-  </tr>
-  <tr>
-    <td align="center">
-      <img src="docs/images/lidar_only_trajectory.png" alt="Solo LiDAR" width="100%"/>
-      <br/>
-      ❌ <strong>Error RMS: 34.2 cm</strong>
-      <br/>
-      <em>Deriva acumulativa evidente</em>
-    </td>
-    <td align="center">
-      <img src="docs/images/fusion_rtk_lidar_trajectory.png" alt="Fusión" width="100%"/>
-      <br/>
-      ✅ <strong>Error RMS: 5.2 cm</strong>
-      <br/>
-      <em>Trayectoria estable y precisa</em>
-    </td>
-  </tr>
-</table>
 
 ---
 
 ## 📋 Descripción del Proyecto
 
 Esta estancia de investigación desarrolla e implementa **algoritmos avanzados de fusión sensorial** que combinan datos de **RTK-GPS** (Real-Time Kinematic) y **LiDAR Velodyne VLP-16** para obtener estimaciones precisas y robustas de la pose vehicular en tiempo real (posición 3D + orientación).
-
-### ✨ Características Principales
-
-<div align="center">
-
-| 🎯 Característica | 📊 Especificación | ✅ Estado |
-|------------------|-------------------|-----------|
-| **Precisión de Localización** | 5.2 cm RMS (Vuelta 2) | Objetivo <10cm cumplido |
-| **Precisión de Orientación** | 0.8° RMS | Objetivo <1° cumplido |
-| **Frecuencia de Procesamiento** | 18-22 Hz | Objetivo >5Hz cumplido |
-| **Robustez sin GPS** | <50cm en 30s | Especificación cumplida |
-| **Cobertura del Mapa** | 50m × 40m × 8m | 156K puntos |
-| **Estrategia de Fusión** | Adaptativa (50%/85% RTK) | Implementado |
-| **Multi-Strategy Fallback** | NDT → ICP → RTK | 3 niveles |
-| **Detección de Deriva** | Umbral 2.0m | Automática |
-
-</div>
-
-### 🏆 Ventajas Competitivas
-
-```diff
-+ ✅ Fusión RTK centimétrica (vs GPS estándar 1-3m de otros sistemas)
-+ ✅ Procesamiento más rápido: 18-22 Hz (vs 5-10 Hz en LOAM/LeGO-LOAM)
-+ ✅ Multi-estrategia de registro robusta (NDT → ICP → RTK fallback)
-+ ✅ Detección activa de deriva con corrección automática en tiempo real
-+ ✅ Metodología de 2 pasadas: Mapeo (V1) + Localización (V2)
-+ ✅ Filtrado agresivo de suelo con RANSAC adaptativo
-```
 
 ### 🎯 Objetivos de Investigación
 
