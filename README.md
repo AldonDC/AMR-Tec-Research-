@@ -1,6 +1,6 @@
 <div align="center">
 
-![MATLAB RTK-GPS LiDAR SLAM Cover](./assets/matlab_cover.svg)
+![MATLAB RTK-GPS LiDAR SLAM Cover](github/assets/matlab_cover.svg)
 
 [![MATLAB](https://img.shields.io/badge/MATLAB-R2023b+-orange.svg?style=for-the-badge&logo=data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNCAyNCI+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTIyLjUgMTQuNWMtLjcgMC0xLjUuMy0yLjEuOWwtMi45LTEuN2MuNC0uNy42LTEuNS42LTIuNHMtLjItMS43LS42LTIuNGwyLjktMS43Yy42LjUgMS40LjkgMi4xLjkgMS45IDAgMy41LTEuNiAzLjUtMy41UzI0LjQgMS4xIDIyLjUgMS4xUzE5IDIuNyAxOSA0LjZjMCAuNS4xIDEgLjMgMS40bC0yLjkgMS43Yy0uOS0xLjItMi4zLTItMy45LTJzLTMgLjgtMy45IDJsLTIuOS0xLjdjLjItLjQuMy0uOS4zLTEuNCAwLTEuOS0xLjYtMy41LTMuNS0zLjVTLjUgMi43LjUgNC42czEuNiAzLjUgMy41IDMuNWMuNyAwIDEuNS0uMyAyLjEtLjlsMi45IDEuN2MtLjQuNy0uNiAxLjUtLjYgMi40czIgMS43LjYgMi40bC0yLjkgMS43Yy0uNi0uNS0xLjQtLjktMi4xLS45LTEuOSAwLTMuNSAxLjYtMy41IDMuNVM0LjEgMjEuNCA2IDIxLjRzMy41LTEuNiAzLjUtMy41YzAtLjUtLjEtMS0uMy0xLjRsMi45LTEuN2MuOSAxLjIgMi4zIDIgMy45IDJzMy0uOCAzLjktMmwyLjkgMS43Yy0uMi40LS4zLjktLjMgMS40IDAgMS45IDEuNiAzLjUgMy41IDMuNXMzLjUtMS42IDMuNS0zLjUtMS42LTMuNS0zLjUtMy41eiIvPjwvc3ZnPg==)](https://www.mathworks.com/products/matlab.html)
 [![Velodyne](https://img.shields.io/badge/LiDAR-Velodyne_VLP16-blue.svg?style=for-the-badge)](https://velodynelidar.com/products/puck/)
@@ -91,40 +91,10 @@ Desarrollar un sistema de fusión sensorial multi-modal que integre mediciones R
 
 El sistema implementa una **arquitectura de fusión probabilística** que combina las fortalezas complementarias de ambos sensores:
 
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    PIPELINE DE FUSIÓN                        │
-├─────────────────────────────────────────────────────────────┤
-│                                                               │
-│  RTK-GPS (10Hz)           LiDAR VLP-16 (10Hz)               │
-│      ↓                           ↓                           │
-│  ┌──────────┐              ┌──────────┐                     │
-│  │ Parser   │              │ Prepro-  │                     │
-│  │ NMEA     │              │ cesado   │                     │
-│  │ GGA      │              │ 3D       │                     │
-│  └────┬─────┘              └────┬─────┘                     │
-│       │                         │                           │
-│       │ [lat,lon,alt]           │ [pointCloud]              │
-│       ↓                         ↓                           │
-│  ┌──────────┐              ┌──────────┐                     │
-│  │ Coord.   │              │ NDT/ICP  │                     │
-│  │ WGS84→   │              │ Registro │                     │
-│  │ UTM      │              │ 3D       │                     │
-│  └────┬─────┘              └────┬─────┘                     │
-│       │                         │                           │
-│       │ [x,y,z] UTM            │ [ΔT, ΔR] relativo         │
-│       └────────┬────────────────┘                           │
-│                ↓                                             │
-│       ┌─────────────────┐                                   │
-│       │  FILTRO DE      │                                   │
-│       │  FUSIÓN         │                                   │
-│       │  (Weighted Sum) │                                   │
-│       └────────┬────────┘                                   │
-│                ↓                                             │
-│         [x,y,z,roll,pitch,yaw]                              │
-│         Pose 6DOF estimada                                  │
-└─────────────────────────────────────────────────────────────┘
-```
+<img width="763" height="814" alt="image" src="https://github.com/user-attachments/assets/8922ac84-9939-4a75-b0cc-bc4e4e31a0d5" />
+
+---
+
 
 ### Algoritmo de Fusión Implementado
 
@@ -594,37 +564,6 @@ end
 
 ---
 
-## 📁 Estructura del Repositorio
-
-```
-Estancia_Investigacion-2025/
-│
-├── README.md                          # Este archivo
-│
-├── scripts/                           # Scripts principales de captura y procesamiento
-│   ├── lidar_slam_3d_rtk_professional_v_clusters_mejorado.m
-│   ├── analizar_metodologia_dos_pasadas.m
-│   └── visualizar_pipeline_slam_4_etapas.m
-│
-├── data/                              # Datasets capturados
-│   └── recorrido_20250829_163719.mat  # Ejemplo de captura RTK+LiDAR
-│
-├── results/                           # Resultados experimentales
-│   ├── mapa_3d_final.ply
-│   ├── trayectoria_v1_mapeo.csv
-│   └── trayectoria_v2_localizacion.csv
-│
-├── docs/                              # Documentación técnica
-│   ├── INTEGRACION_CODIGO_EFECTIVO_164410.md
-│   ├── GUIA_NAVEGACION_AMR.md
-│   ├── MEJORAS_LIMPIEZA_MAPAS.md
-│   ├── FIX_PUNTOS_DISPERSOS_V1.md
-│   └── presentacion_slam.tex
-│
-└── tests/                             # Scripts de validación
-    ├── test_ndt_registration.m
-    └── analyze_trajectory_characteristics.m
-```
 
 ---
 
