@@ -418,7 +418,7 @@ end
 <td width="50%" align="center">
 
 ### 🗺️ Mapeo 3D - Vuelta 1
-[![Mapeo 3D Vuelta 1](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-blue?style=for-the-badge)](./results/videos/mapeo_v1.mp4)
+[![Mapeo 3D Vuelta 1](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-blue?style=for-the-badge)](github/results/videos/slam_v1_mapeo.gif)
 
 *Construcción del mapa 3D con fusión 50% RTK + 50% LiDAR*
 
@@ -426,7 +426,7 @@ end
 <td width="50%" align="center">
 
 ### 🎯 Localización - Vuelta 2
-[![Localización Vuelta 2](https://img.shields.io/badge/▶️_Ver_Video-Localización-green?style=for-the-badge)](./results/videos/localizacion_v2.mp4)
+[![Mapeo 3D Vuelta 1](https://img.shields.io/badge/▶️_Ver_Video-Mapeo_3D-blue?style=for-the-badge)](github/results/videos/slam_v2_localizacion.gif)
 
 *Localización precisa con fusión 85% RTK + 15% LiDAR*
 
